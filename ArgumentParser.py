@@ -3,7 +3,7 @@ import os
 
 class ArgumentParser:
     def __init__(self):
-        pass  # No need to initialize anything here in this context
+        pass
 
     @staticmethod
     def validate_project_path(path):
@@ -33,10 +33,3 @@ class ArgumentParser:
         args = parser.parse_args()
 
         return (args.command, args.project, args.config)
-
-        # if args.command == "import":
-            # import_data(args.project, args.config)
-        # elif args.command == "export":
-            # export_data(args.project, args.config)
-
-

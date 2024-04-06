@@ -4,7 +4,7 @@ from LocalizationFile import LocalizationFile
 
 class LocalizationFilesReader:
     def __init__(self):
-        pass  # No need to initialize anything here in this context
+        pass
     
     def search(self, url, escaping_paths):
         locations = self.fetch_localization_folders(url, escaping_paths)
