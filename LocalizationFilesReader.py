@@ -7,7 +7,8 @@ class LocalizationFilesReader:
         pass
     
     def search(self, url, escaping_paths):
-        locations = self.fetch_localization_folders(url, escaping_paths)
+        folder = os.path.dirname(url)
+        locations = self.__fetch_localization_folders(folder, escaping_paths)
 
         result = []
         for location in locations:
@@ -20,15 +21,15 @@ class LocalizationFilesReader:
                         result.append(item)
         return result
     
-    def fetch_localization_folders(self, url, urls):
+    def __fetch_localization_folders(self, url, urls):
         folders = []
         for root, dir, files in os.walk(url):
-            if not self.should_skip_root(root, urls) and os.path.splitext(root)[1] == ".lproj":
+            if not self.__should_skip_root(root, urls) and os.path.splitext(root)[1] == ".lproj":
                 folders.append(root)
         
         return folders
 
-    def should_skip_root(self, root, urls):
+    def __should_skip_root(self, root, urls):
         for skip_url in urls:
             if root.startswith(skip_url):
                 return True
