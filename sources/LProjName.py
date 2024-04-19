@@ -807,11 +807,26 @@ class LProjName(Enum):
             return LProjName(last_component)
         return None
     
-    # @staticmethod
-    # def with_english_name(english_name):
-    #     for name in dir(LProjName):
-    #         if not name.startswith("__"):  # Exclude special attributes
-    #             value = getattr(LProjName, name)
-    #             if isinstance(value, str) and value.english_locale_name == english_name:
-    #                 return value
-    #     return None
+    @property
+    def title(self):
+        return self.__split_name(self.name)
+    
+    def __split_name(self, input_string):
+        split_words = []
+        current_word = ''
+
+        for char in input_string:
+            if char.isupper() and current_word:
+                split_words.append(current_word)
+                current_word = char
+            else:
+                current_word += char
+
+        if current_word:
+            split_words.append(current_word)
+
+        if split_words:
+            split_words[0] = split_words[0].capitalize()
+            return ' '.join(split_words)
+
+        return ""

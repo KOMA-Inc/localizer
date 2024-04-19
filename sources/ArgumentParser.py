@@ -29,7 +29,8 @@ class ArgumentParser:
             subparser = subparsers.add_parser(command, help=f"{command.capitalize()} data")
             subparser.add_argument("-p", "--project", required=True, type=self.validate_project_path, help="Path to .xcodeproj file")
             subparser.add_argument("-c", "--config", required=True, type=self.validate_config_path, help="Path to .json config file")
+            subparser.add_argument("-y", "--yaml", required=True, help="Path to .json config file")
 
         args = parser.parse_args()
 
-        return (args.command, args.project, args.config)
+        return (args.command, args.project, args.config, args.yaml)
