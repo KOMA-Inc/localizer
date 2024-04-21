@@ -65,7 +65,7 @@ class SlackMessanger:
         }
 
         response = requests.post(
-            "https://hooks.slack.com/services/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",
+            slack_object.webhook_url,
             data=json.dumps(payload),
             headers=headers
         )
