@@ -60,7 +60,9 @@ class StringsFileReader:
                 continue
 
             if first.startswith('"'):
-                parts = [part.strip() for part in first.split("=")]
+                parts = [part for part in first.split("=")]
+                parts = [parts[0], "=".join(parts[1:])]
+                parts = [part.strip() for part in parts]
 
                 if len(parts) == 2:
                     key = parts[0].strip('"')

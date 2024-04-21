@@ -1,5 +1,10 @@
 import pandas as pd
 from ExportInput import ExportInput
+from LProjName import LProjName
+from StringsFileReader import Symbol
+from LocalizationEntity import LocalizationEntity
+from LocalizationGroup import LocalizationGroup
+from hashlib import md5
 
 class StringsColumn:
 
@@ -17,6 +22,59 @@ class PandasManager:
     def create_export_inputs(self, groups):
         inputs = [self.__create_export_input(group) for group in groups]
         return inputs
+    
+    def create_import_groups(self, import_inputs, files):
+        groups = [self.__create_import_groups(input, files) for input in import_inputs]
+        return groups
+
+    def __create_import_groups(self, import_input, files):
+        if len(import_input.records) == 0:
+            return [] 
+
+        languages = [
+            getattr(LProjName, self.__language(column)) 
+            for column in import_input.records[0] if column != "key"
+        ]
+
+        string_elements_dict = {}
+        for language in languages:
+           string_elements_dict[language] = [] 
+
+        for record in import_input.records:
+            for key, value in record.items():
+                if key == "key":
+                    continue
+                language_value = self.__language(key)
+                language = getattr(LProjName, language_value)
+                if value == "":
+                    string_elements_dict[language].append({"type": "newline"})
+                elif value.startswith(Symbol.lineComment.value):
+                    if value.startswith(Symbol.unlocalizedComment.value):
+                        continue
+                    string_elements_dict[language].append({"type": "line_comment", "comment": value})
+                elif value.startswith(Symbol.blockCommentStart.value):
+                    string_elements_dict[language].append({"type": "block_comment", "comment": value})
+                else:
+                    string_elements_dict[language].append({"type": "string", "key": record["key"], "value": value})
+        
+        entities = []
+
+        for key, string_elements in string_elements_dict.items():
+            file = next((f for f in files if f.path.endswith(f"{key.value}.lproj/{import_input.name}.strings")), None)
+            if file is not None:
+                entities.append(LocalizationEntity(file, string_elements))
+        
+        return LocalizationGroup(import_input.name, entities[0].file.kind, entities, md5(entities[0].file.path.encode()).hexdigest())
+
+    
+    def __language(self, string):
+        # Split the string by spaces and join without spaces
+        camel_case_string = ''.join(string.split())
+
+        # Convert the first character to lowercase
+        camel_case_string = camel_case_string[0].lower() + camel_case_string[1:]
+        
+        return camel_case_string
     
     def __create_export_input(self, group):
         entities = sorted(group.entities, key=lambda e: e.language.title)

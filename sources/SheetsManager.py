@@ -2,7 +2,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from pprint import pprint as pp
 from SlackMessanger import SlackMessanger, SlackRangeInput
-
+from ImportInput import ImportInput
 
 class SheetsManager:
 
@@ -32,6 +32,22 @@ class SheetsManager:
             slack_inputs.append(SlackRangeInput(input.title, sheet.url, self.__analize_non_localized_ranges(input)))
 
         SlackMessanger().send_slack_message(slack_inputs, slack_object)
+    
+    def importt(self, sheets_names, creds, sheets_url):
+        client = self.client(creds)
+        sh = client.open_by_url(sheets_url)
+
+        inputs = []
+
+        for sheet_name in sheets_names:
+            try:
+                sheet = sh.worksheet(sheet_name)
+                records = sheet.get_all_records()
+                inputs.append(ImportInput(sheet_name, records))
+            except:
+                inputs.append(ImportInput(sheet_name, []))
+        
+        return inputs
         
     def __analize_non_localized_ranges(self, input):
             df = input.dataframe

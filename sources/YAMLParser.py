@@ -1,7 +1,8 @@
 import yaml
 
 class Slack:
-    def __init__(self, message=None, tag_id=None, message_emoji=None, project_emoji=None, project_name=None):
+    def __init__(self, webhook_url, message=None, tag_id=None, message_emoji=None, project_emoji=None, project_name=None):
+        self.webhook_url = webhook_url
         self.message = message
         self.tag_id = tag_id
         self.message_emoji = message_emoji
@@ -27,11 +28,17 @@ class YAMLParser:
                 # Parse Slack data if present
                 if 'slack' in yaml_data:
                     slack_data = yaml_data['slack']
-                    slack_obj = Slack(message=slack_data.get('message'),
-                                    tag_id=slack_data.get('tag_id'),
-                                    message_emoji=slack_data.get('message_emoji'),
-                                    project_emoji=slack_data.get('project_emoji'),
-                                    project_name=slack_data.get('project_name'))
+                    # Check if webhook_url is present
+                    if 'webhook_url' not in slack_data:
+                        raise ValueError("webhook_url is mandatory in slack")
+                    slack_obj = Slack(
+                        webhook_url=slack_data['webhook_url'],
+                        message=slack_data.get('message'),
+                        tag_id=slack_data.get('tag_id'),
+                        message_emoji=slack_data.get('message_emoji'),
+                        project_emoji=slack_data.get('project_emoji'),
+                        project_name=slack_data.get('project_name')
+                    )
                 else:
                     slack_obj = None
 
@@ -42,9 +49,6 @@ class YAMLParser:
 
         except yaml.YAMLError as e:
             raise ValueError(f"Error parsing YAML: {e}")
-        
-        except AttributeError as e:
-            return google_sheet_url, Slack()
 
         except Exception as e:
             raise ValueError(f"Error: {e}")
