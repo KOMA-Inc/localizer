@@ -24,3 +24,18 @@ Features:
 12. Save your creds.json file
 
 ### Create .yaml config file
+
+Download the [example](https://github.com/KOMA-Inc/localizer/blob/main/config_example.yml) and update it for your needs.  
+To get the tag_id to your colleague's account is Slack and tap "Copy memeber ID"
+
+### Run the script
+
+Import:
+```bash
+python3 localizer/sources/main.py import -p ./<MyProject>.xcodeproj -c ./creds.json -y ./lconfig.yml
+```
+
+Export:
+```bash
+python3 localizer/sources/main.py export -p ./<MyProject>.xcodeproj -c ./creds.json -y ./lconfig.yml
+```
