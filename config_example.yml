@@ -1,0 +1,9 @@
+google_sheet_url: https://docs.google.com/spreadsheets/d/<some_url>
+
+slack:
+    webhook_url:        "https://hooks.slack.com/services/<web_hook>"
+    message:            "Greetings" # optional
+    tag_id:             <id> # optional
+    message_emoji:      ":kitty_spin:" # optional
+    project_emoji:      ":example_project:" # optional
+    project_name:       ExampleProject # optional
