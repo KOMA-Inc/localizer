@@ -32,10 +32,10 @@ To get the tag_id to your colleague's account is Slack and tap "Copy memeber ID"
 
 Import:
 ```bash
-python3 localizer/sources/main.py import -p ./<MyProject>.xcodeproj -c ./creds.json -y ./lconfig.yml
+python3 localizer/sources/main.py import -p ./MyProject.xcodeproj -c ./creds.json -y ./lconfig.yml
 ```
 
 Export:
 ```bash
-python3 localizer/sources/main.py export -p ./<MyProject>.xcodeproj -c ./creds.json -y ./lconfig.yml
+python3 localizer/sources/main.py export -p ./MyProject.xcodeproj -c ./creds.json -y ./lconfig.yml
 ```
