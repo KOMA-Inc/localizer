@@ -1,6 +1,6 @@
 google_sheet_url: https://docs.google.com/spreadsheets/d/<some_url>
 
-slack:
+slack:                  # optional
     webhook_url:        "https://hooks.slack.com/services/<web_hook>"
     message:            "Greetings" # optional
     tag_id:             <id> # optional
